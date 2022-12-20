@@ -25,8 +25,8 @@ namespace RedisAPI.Data
             var serialPlat = JsonSerializer.Serialize(plat);
 
             //db.StringSet(plat.Id, serialPlat);
-            db.HashSet($"hashplatform", new HashEntry[] 
-                {new HashEntry(plat.Id, serialPlat)});
+            //db.SetAdd("platformSet", serialPlat);
+            db.HashSet($"hashplatform", new HashEntry[] {new HashEntry(plat.Id, serialPlat)});
         }
 
         public Platform? GetPlatformById(string id)
@@ -48,12 +48,12 @@ namespace RedisAPI.Data
         {
             var db = _redis.GetDatabase();
 
+            //var completeSet = db.SetMembers();
             var completeSet = db.HashGetAll("hashplatform");
             
             if (completeSet.Length > 0)
             {
-                var obj = Array.ConvertAll(completeSet, val => 
-                    JsonSerializer.Deserialize<Platform>(val.Value)).ToList();
+                var obj = Array.ConvertAll(completeSet, val => JsonSerializer.Deserialize<Platform>(val.Value)).ToList();
                 return obj;   
             }
             
