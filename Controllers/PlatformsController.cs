@@ -41,7 +41,7 @@ namespace RedisAPI.Controllers
         {
             _repository.CreatePlatform(platform);
 
-            return Ok(platform);
+            return CreatedAtRoute(nameof(GetPlatformById), new {Id = platform.Id}, platform);
         }
 
     }
